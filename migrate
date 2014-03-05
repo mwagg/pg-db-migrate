@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+
+/usr/local/pg-db-migrate/write_config "$@" > /tmp/database.json
+cd /usr/local/pg-db-migrate
+mkdir -p migrations
+cp /migrations/* ./migrations/
+./node_modules/.bin/db-migrate up --config /tmp/database.json
