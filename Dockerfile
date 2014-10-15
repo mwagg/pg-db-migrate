@@ -1,7 +1,7 @@
 FROM ubuntu
 
 RUN apt-get update
-RUN apt-get install -y curl
+RUN apt-get install -y curl python
 
 RUN mkdir -p /usr/local/node
 RUN curl -L http://nodejs.org/dist/v0.10.26/node-v0.10.26-linux-x64.tar.gz | \
