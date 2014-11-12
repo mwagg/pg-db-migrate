@@ -13,10 +13,12 @@ function check_connection() {
   fi
 
   echo "Testing connection attempt $iteration"
+  exec 6<>/dev/tcp/$DB_PORT_5432_TCP_ADDR/$DB_PORT_5432_TCP_PORT
+  results=$?
+  exec 6>&- # close output connection
+  exec 6<&- # close input connection
 
-  nc -z $DB_PORT_5432_TCP_ADDR $DB_PORT_5432_TCP_PORT
-
-  if [[ "$?" -ne "0" ]]
+  if [[ "$result" -ne "0" ]]
   then
     sleep 1
     check_connection $((iteration + 1))
