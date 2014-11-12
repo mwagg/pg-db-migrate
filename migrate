@@ -1,37 +1,8 @@
 #!/bin/bash
 set -e
 
-function check_connection() {
-  set +e
-
-  iteration=$1
-
-  if (( $iteration > 5 ))
-  then
-    echo "Connection failed."
-    exit 1;
-  fi
-
-  echo "Testing connection attempt $iteration"
-  exec 6<>/dev/tcp/$DB_PORT_5432_TCP_ADDR/$DB_PORT_5432_TCP_PORT
-  results=$?
-  exec 6>&- # close output connection
-  exec 6<&- # close input connection
-
-  if [[ "$result" -ne "0" ]]
-  then
-    sleep 1
-    check_connection $((iteration + 1))
-  else
-    echo "Port is open!"
-  fi
-
-  set -e
-}
-
-check_connection 0
-
 /usr/local/pg-db-migrate/write_config "$@" > /tmp/database.json
+/usr/local/pg-db-migrate/wait_for_pg
 cd /usr/local/pg-db-migrate
 mkdir -p migrations
 cp /migrations/* ./migrations/
