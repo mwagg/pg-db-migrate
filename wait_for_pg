@@ -27,7 +27,7 @@ function tryConnect() {
         process.exit(1);
       }
       console.log("Connection attempt failed")
-      tryConnect();
+      setTimeout(tryConnect, 1000);
     } else {
       console.log("Connected");
       process.exit(0);
